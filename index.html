@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="The Artisan Table — a curated collection of timeless, beautifully crafted recipes." />
+  <meta name="theme-color" content="#FAF6EF" />
+  <title>The Artisan Table · Recipe Book</title>
+
+  <!-- Preconnect for fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ░░ LOADER ░░ -->
+  <div id="loader" role="status" aria-label="Loading">
+    <div class="loader-logo">The Artisan Table</div>
+    <div class="loader-bar"><div class="loader-bar-fill"></div></div>
+  </div>
+
+  <!-- ░░ NAVIGATION ░░ -->
+  <nav id="navbar" aria-label="Main navigation">
+    <a href="#" class="nav-logo">The <span>Artisan</span> Table</a>
+
+    <ul class="nav-links">
+      <li><a href="#recipes">Recipes</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#featured">Inspiration</a></li>
+    </ul>
+
+    <!-- Search -->
+    <div class="nav-search" role="search" style="position:relative">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <input
+        type="search"
+        id="search-input"
+        placeholder="Search recipes…"
+        aria-label="Search recipes"
+        autocomplete="off"
+      />
+      <!-- Search Dropdown -->
+      <div id="search-dropdown" role="listbox" aria-label="Search results"></div>
+    </div>
+  </nav>
+
+  <!-- ░░ HERO ░░ -->
+  <section id="hero" aria-labelledby="hero-title">
+    <div class="hero-bg" aria-hidden="true"></div>
+    <div class="hero-deco" aria-hidden="true"></div>
+
+    <div class="hero-content">
+      <div class="hero-tag">Handcrafted Recipes</div>
+
+      <h1 class="hero-title" id="hero-title">
+        Cook with
+        <em>intention</em>
+        &amp; love.
+      </h1>
+
+      <p class="hero-desc">
+        A curated collection of timeless recipes — from Sunday morning indulgences
+        to show-stopping dinner feasts. Every dish, a small work of art.
+      </p>
+
+      <div class="hero-actions">
+        <a href="#recipes" class="btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+          Browse Recipes
+        </a>
+        <a href="#about" class="btn-secondary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Our Story
+        </a>
+      </div>
+
+      <div class="hero-stats">
+        <div>
+          <div class="stat-num" data-count="48" data-suffix="+">0+</div>
+          <div class="stat-label">Recipes</div>
+        </div>
+        <div>
+          <div class="stat-num" data-count="5">0</div>
+          <div class="stat-label">Categories</div>
+        </div>
+        <div>
+          <div class="stat-num" data-count="12000" data-suffix="+">0+</div>
+          <div class="stat-label">Home Cooks</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hero visual stack -->
+    <div class="hero-visual" aria-hidden="true">
+      <div class="hero-card-stack">
+        <div class="hero-card">
+          <div class="hero-card-emoji">🥚</div>
+          <div class="hero-card-title">Truffle Scrambled Eggs</div>
+          <div class="hero-card-meta">Breakfast · 12 min</div>
+        </div>
+        <div class="hero-card">
+          <div class="hero-card-emoji">🥩</div>
+          <div class="hero-card-title">Beef Bourguignon</div>
+          <div class="hero-card-meta">Dinner · 3 hrs · Classic</div>
+        </div>
+        <div class="hero-card">
+          <div class="hero-card-emoji">🍮</div>
+          <div class="hero-card-title">Crème Brûlée</div>
+          <div class="hero-card-meta">Dessert · ★ 4.9</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ░░ ABOUT STRIP ░░ -->
+  <section id="about" class="section" style="background:var(--parchment); padding: 5rem 2.5rem;">
+    <div style="max-width:960px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:center;">
+      <div class="reveal">
+        <div class="section-tag">Our Philosophy</div>
+        <h2 style="font-size:clamp(1.8rem,3vw,2.6rem); font-weight:800; margin-bottom:1.25rem; font-family:var(--font-display);">
+          Slow food,<br><em style="color:var(--terracotta);">fast joy.</em>
+        </h2>
+        <p style="font-family:var(--font-serif); font-size:1.1rem; line-height:1.8; color:var(--ink-light); margin-bottom:1rem;">
+          Every recipe in this collection has been tested, refined, and cooked with care.
+          We believe that cooking is one of the greatest joys in life — and great food
+          starts with great ingredients, handled simply.
+        </p>
+        <p style="font-family:var(--font-serif); font-size:1rem; line-height:1.8; color:rgba(61,43,31,.6);">
+          From 10-minute weeknight dinners to weekend labour-of-love projects,
+          The Artisan Table has a recipe for every season of life.
+        </p>
+      </div>
+      <div class="reveal" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+        <div style="background:var(--warm-white); border-radius:var(--radius); padding:1.5rem; box-shadow:var(--shadow-card); text-align:center;">
+          <div style="font-size:2.5rem; margin-bottom:.75rem;">🌿</div>
+          <div style="font-family:var(--font-display); font-weight:700; margin-bottom:.3rem;">Seasonal</div>
+          <div style="font-size:.85rem; color:rgba(28,21,16,.5);">Recipes that celebrate what's fresh</div>
+        </div>
+        <div style="background:var(--warm-white); border-radius:var(--radius); padding:1.5rem; box-shadow:var(--shadow-card); text-align:center; margin-top:1.5rem;">
+          <div style="font-size:2.5rem; margin-bottom:.75rem;">🔥</div>
+          <div style="font-family:var(--font-display); font-weight:700; margin-bottom:.3rem;">Tested</div>
+          <div style="font-size:.85rem; color:rgba(28,21,16,.5);">Every recipe cooked 3× before publishing</div>
+        </div>
+        <div style="background:var(--warm-white); border-radius:var(--radius); padding:1.5rem; box-shadow:var(--shadow-card); text-align:center; margin-top:-1rem;">
+          <div style="font-size:2.5rem; margin-bottom:.75rem;">📖</div>
+          <div style="font-family:var(--font-display); font-weight:700; margin-bottom:.3rem;">Clear</div>
+          <div style="font-size:.85rem; color:rgba(28,21,16,.5);">No fuss, no jargon, just clear steps</div>
+        </div>
+        <div style="background:var(--terracotta); border-radius:var(--radius); padding:1.5rem; box-shadow:var(--shadow-card); text-align:center; color:var(--warm-white);">
+          <div style="font-size:2.5rem; margin-bottom:.75rem;">❤️</div>
+          <div style="font-family:var(--font-display); font-weight:700; margin-bottom:.3rem;">Made with Love</div>
+          <div style="font-size:.85rem; opacity:.8;">Always the secret ingredient</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ░░ RECIPE BOOK ░░ -->
+  <section id="recipes" class="section" aria-labelledby="recipes-title">
+    <div class="section-header reveal">
+      <div class="section-tag">The Collection</div>
+      <h2 class="section-title" id="recipes-title">Our Recipes</h2>
+      <p class="section-subtitle">
+        Filter by category, search by name, or simply browse — every recipe is a journey.
+      </p>
+    </div>
+
+    <!-- Category Filter -->
+    <div id="category-filter" class="category-filter reveal" role="group" aria-label="Filter recipes by category"></div>
+
+    <!-- Grid -->
+    <div id="recipe-grid" role="list" aria-label="Recipe cards"></div>
+  </section>
+
+  <!-- ░░ FEATURED QUOTE ░░ -->
+  <section id="featured" aria-label="Inspirational quote">
+    <div class="featured-inner reveal">
+      <p class="featured-quote">
+        "Cooking is at once child's play and adult joy. And cooking done with care is an act of love."
+      </p>
+      <div class="featured-attr">— Craig Claiborne, Food Writer & Critic</div>
+    </div>
+  </section>
+
+  <!-- ░░ TIPS SECTION ░░ -->
+  <section class="section" style="background:var(--warm-white);" aria-label="Cooking tips">
+    <div class="section-header reveal">
+      <div class="section-tag">Pro Kitchen Tips</div>
+      <h2 class="section-title">Cook Like a Chef</h2>
+      <p class="section-subtitle">Simple principles that elevate every meal from good to unforgettable.</p>
+    </div>
+
+    <div class="reveal" style="max-width:1000px; margin:0 auto; display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem;">
+      <div style="padding:2rem; background:var(--cream); border-radius:var(--radius-lg); border-top:4px solid var(--terracotta);">
+        <div style="font-size:2rem; margin-bottom:1rem;">🧂</div>
+        <h3 style="font-family:var(--font-display); font-size:1.1rem; margin-bottom:.75rem;">Season in Layers</h3>
+        <p style="font-family:var(--font-serif); font-size:.95rem; color:var(--ink-light); line-height:1.7;">
+          Add salt at each stage of cooking, not just at the end. Building flavour in layers creates depth you can't achieve otherwise.
+        </p>
+      </div>
+      <div style="padding:2rem; background:var(--cream); border-radius:var(--radius-lg); border-top:4px solid var(--gold);">
+        <div style="font-size:2rem; margin-bottom:1rem;">🌡️</div>
+        <h3 style="font-family:var(--font-display); font-size:1.1rem; margin-bottom:.75rem;">Rest Your Meat</h3>
+        <p style="font-family:var(--font-serif); font-size:.95rem; color:var(--ink-light); line-height:1.7;">
+          After cooking, let meat rest for at least 5–10 minutes. This redistributes juices and makes every bite far more succulent.
+        </p>
+      </div>
+      <div style="padding:2rem; background:var(--cream); border-radius:var(--radius-lg); border-top:4px solid var(--sage);">
+        <div style="font-size:2rem; margin-bottom:1rem;">🔪</div>
+        <h3 style="font-family:var(--font-display); font-size:1.1rem; margin-bottom:.75rem;">Sharp Knives Only</h3>
+        <p style="font-family:var(--font-serif); font-size:.95rem; color:var(--ink-light); line-height:1.7;">
+          A sharp knife is your single most important kitchen tool. It's safer, faster, and produces cleaner cuts for better texture.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ░░ RECIPE MODAL ░░ -->
+  <div id="modal-overlay" role="dialog" aria-modal="true" aria-label="Recipe details">
+    <div class="modal" id="modal-content"></div>
+  </div>
+
+  <!-- ░░ FOOTER ░░ -->
+  <footer>
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand-name">The Artisan Table</div>
+        <p class="footer-brand-desc">
+          A beautifully curated collection of recipes for every occasion —
+          crafted with care, tested with love, shared with the world.
+        </p>
+      </div>
+      <div>
+        <div class="footer-col-title">Explore</div>
+        <ul class="footer-links">
+          <li><a href="#recipes">All Recipes</a></li>
+          <li><a href="#recipes">Breakfast</a></li>
+          <li><a href="#recipes">Dinner</a></li>
+          <li><a href="#recipes">Desserts</a></li>
+          <li><a href="#recipes">Drinks</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">About</div>
+        <ul class="footer-links">
+          <li><a href="#about">Our Story</a></li>
+          <li><a href="#featured">Inspiration</a></li>
+          <li><a href="#">Submit a Recipe</a></li>
+          <li><a href="#">Newsletter</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 The Artisan Table. All rights reserved.</span>
+      <span>Made with ❤️ & good ingredients.</span>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,347 @@
+# ============================================================
+# The Artisan Table — CI/CD Pipeline
+# GitHub Actions Workflow
+# ============================================================
+#
+# Stages:
+#   1. lint       → ESLint + HTML validator + CSS linting
+#   2. test       → Unit tests (Jest) + accessibility audit (axe)
+#   3. build      → Minify HTML/CSS/JS, optimise JSON assets
+#   4. deploy     → Push to GitHub Pages (prod) or preview (PR)
+#   5. notify     → Slack notification on success/failure
+# ============================================================
+
+name: 🍽️ Artisan Table — Build & Deploy
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:          # manual trigger from GitHub UI
+  schedule:
+    - cron: '0 6 * * 1'      # weekly health-check every Monday 06:00 UTC
+
+# Cancel in-progress runs on the same branch/PR
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: '20'
+  SITE_URL: 'https://${{ github.repository_owner }}.github.io/artisan-table'
+  BUILD_DIR: dist
+
+jobs:
+
+  # ──────────────────────────────────────────────────────────
+  # JOB 1: Lint
+  # ──────────────────────────────────────────────────────────
+  lint:
+    name: 🔍 Lint & Validate
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint JavaScript (ESLint)
+        run: npx eslint app.js --max-warnings=0
+
+      - name: Validate JSON data
+        run: |
+          node -e "
+            const fs = require('fs');
+            try {
+              const data = JSON.parse(fs.readFileSync('recipes.json', 'utf8'));
+              const required = ['meta', 'categories', 'recipes'];
+              required.forEach(k => {
+                if (!data[k]) throw new Error('Missing key: ' + k);
+              });
+              console.log('✅ recipes.json is valid —', data.recipes.length, 'recipes found');
+            } catch (e) {
+              console.error('❌ JSON validation failed:', e.message);
+              process.exit(1);
+            }
+          "
+
+      - name: Lint CSS (Stylelint)
+        run: npx stylelint styles.css --config '{"extends":"stylelint-config-standard"}'
+        continue-on-error: true      # warn only; CSS lint failures don't block deploy
+
+      - name: Validate HTML (html-validate)
+        run: |
+          npx html-validate index.html \
+            --rule 'require-sri:off' \
+            --rule 'no-inline-style:off'
+
+  # ──────────────────────────────────────────────────────────
+  # JOB 2: Test
+  # ──────────────────────────────────────────────────────────
+  test:
+    name: 🧪 Tests & Accessibility
+    runs-on: ubuntu-latest
+    needs: lint
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run unit tests (Jest)
+        run: npx jest --coverage --coverageReporters=text --coverageReporters=lcov
+        env:
+          CI: true
+
+      - name: Upload coverage report
+        uses: codecov/codecov-action@v4
+        with:
+          file: ./coverage/lcov.info
+          flags: unittests
+          fail_ci_if_error: false   # don't fail on coverage upload issues
+
+      - name: Accessibility audit (axe-core via Playwright)
+        run: |
+          npx playwright install chromium --with-deps
+          npx playwright test --reporter=list
+        env:
+          BASE_URL: 'http://localhost:8080'
+        continue-on-error: true     # a11y findings are reported but not blocking
+
+      - name: Validate recipe schema
+        run: |
+          node -e "
+            const data = require('./recipes.json');
+            let errors = 0;
+            data.recipes.forEach((r, i) => {
+              const fields = ['id','title','category','time','servings','difficulty','rating','calories','tags','description','image','color','ingredients','steps'];
+              fields.forEach(f => {
+                if (r[f] === undefined) {
+                  console.error('Recipe', i, '('+r.title+'): missing field', f);
+                  errors++;
+                }
+              });
+            });
+            if (errors) { console.error(errors, 'schema error(s) found'); process.exit(1); }
+            console.log('✅ All', data.recipes.length, 'recipe schemas valid');
+          "
+
+  # ──────────────────────────────────────────────────────────
+  # JOB 3: Build
+  # ──────────────────────────────────────────────────────────
+  build:
+    name: 🔨 Build & Optimise
+    runs-on: ubuntu-latest
+    needs: test
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Create dist directory
+        run: mkdir -p ${{ env.BUILD_DIR }}
+
+      - name: Minify HTML
+        run: |
+          npx html-minifier-terser index.html \
+            --collapse-whitespace \
+            --remove-comments \
+            --remove-optional-tags \
+            --remove-redundant-attributes \
+            --use-short-doctype \
+            --output ${{ env.BUILD_DIR }}/index.html
+
+      - name: Minify CSS
+        run: |
+          npx cleancss styles.css \
+            --level 2 \
+            --output ${{ env.BUILD_DIR }}/styles.css
+
+      - name: Minify JavaScript
+        run: |
+          npx terser app.js \
+            --compress \
+            --mangle \
+            --output ${{ env.BUILD_DIR }}/app.js
+
+      - name: Minify & copy JSON
+        run: |
+          node -e "
+            const data = require('./recipes.json');
+            const fs = require('fs');
+            fs.writeFileSync(
+              '${{ env.BUILD_DIR }}/recipes.json',
+              JSON.stringify(data)
+            );
+            console.log('✅ recipes.json minified');
+          "
+
+      - name: Print build sizes
+        run: |
+          echo "=== Build Sizes ==="
+          du -sh ${{ env.BUILD_DIR }}/*
+          echo "=== Total ==="
+          du -sh ${{ env.BUILD_DIR }}
+
+      - name: Upload build artefact
+        uses: actions/upload-artifact@v4
+        with:
+          name: artisan-table-dist-${{ github.sha }}
+          path: ${{ env.BUILD_DIR }}/
+          retention-days: 30
+
+  # ──────────────────────────────────────────────────────────
+  # JOB 4a: Deploy — GitHub Pages (production)
+  # ──────────────────────────────────────────────────────────
+  deploy-prod:
+    name: 🚀 Deploy to Production
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    timeout-minutes: 10
+    environment:
+      name: production
+      url: ${{ env.SITE_URL }}
+
+    permissions:
+      contents: write     # needed for gh-pages push
+      pages: write
+      id-token: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download build artefact
+        uses: actions/download-artifact@v4
+        with:
+          name: artisan-table-dist-${{ github.sha }}
+          path: ${{ env.BUILD_DIR }}
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ${{ env.BUILD_DIR }}
+          publish_branch: gh-pages
+          commit_message: |
+            🚀 Deploy: ${{ github.event.head_commit.message }}
+          cname: artisantable.example.com   # set to your custom domain or remove
+
+  # ──────────────────────────────────────────────────────────
+  # JOB 4b: Deploy — Preview (pull requests)
+  # ──────────────────────────────────────────────────────────
+  deploy-preview:
+    name: 🔎 Deploy Preview (PR)
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event_name == 'pull_request'
+    timeout-minutes: 10
+
+    steps:
+      - name: Download build artefact
+        uses: actions/download-artifact@v4
+        with:
+          name: artisan-table-dist-${{ github.sha }}
+          path: ${{ env.BUILD_DIR }}
+
+      - name: Deploy preview to Netlify
+        id: netlify
+        uses: nwtgck/actions-netlify@v3
+        with:
+          publish-dir: ${{ env.BUILD_DIR }}
+          production-deploy: false
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          deploy-message: "PR #${{ github.event.number }} — ${{ github.head_ref }}"
+          enable-pull-request-comment: true
+          enable-commit-comment: false
+          overwrites-pull-request-comment: true
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+
+      - name: Post preview URL comment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `## 🍽️ Preview Deployed\n\n**URL:** ${{ steps.netlify.outputs.deploy-url }}\n\n> This preview will be automatically removed when the PR is closed.`
+            })
+
+  # ──────────────────────────────────────────────────────────
+  # JOB 5: Notify
+  # ──────────────────────────────────────────────────────────
+  notify:
+    name: 📣 Notify Team
+    runs-on: ubuntu-latest
+    needs: [deploy-prod]
+    if: always() && github.ref == 'refs/heads/main'
+    timeout-minutes: 5
+
+    steps:
+      - name: Set status emoji
+        id: status
+        run: |
+          if [ "${{ needs.deploy-prod.result }}" == "success" ]; then
+            echo "emoji=✅" >> $GITHUB_OUTPUT
+            echo "message=Production deploy succeeded" >> $GITHUB_OUTPUT
+          else
+            echo "emoji=❌" >> $GITHUB_OUTPUT
+            echo "message=Production deploy FAILED" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Send Slack notification
+        uses: slackapi/slack-github-action@v1
+        with:
+          payload: |
+            {
+              "text": "${{ steps.status.outputs.emoji }} *Artisan Table* — ${{ steps.status.outputs.message }}",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "${{ steps.status.outputs.emoji }} *The Artisan Table* — ${{ steps.status.outputs.message }}\n\n*Commit:* `${{ github.sha }}` by @${{ github.actor }}\n*Branch:* `${{ github.ref_name }}`\n*Message:* ${{ github.event.head_commit.message }}\n<${{ env.SITE_URL }}|View Live Site>"
+                  }
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+        continue-on-error: true     # don't fail the pipeline if Slack is down

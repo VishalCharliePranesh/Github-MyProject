@@ -1,0 +1,261 @@
+{
+  "meta": {
+    "title": "The Artisan Table",
+    "subtitle": "A Curated Collection of Timeless Recipes",
+    "version": "1.0.0",
+    "author": "Chef's Kitchen",
+    "updated": "2026-05-16"
+  },
+  "categories": [
+    { "id": "breakfast", "label": "Breakfast", "icon": "🌅" },
+    { "id": "lunch",     "label": "Lunch",     "icon": "☀️" },
+    { "id": "dinner",    "label": "Dinner",    "icon": "🌙" },
+    { "id": "dessert",   "label": "Dessert",   "icon": "🍮" },
+    { "id": "drinks",    "label": "Drinks",    "icon": "🍹" }
+  ],
+  "recipes": [
+    {
+      "id": 1,
+      "title": "Truffle Scrambled Eggs",
+      "category": "breakfast",
+      "time": "12 min",
+      "servings": 2,
+      "difficulty": "Easy",
+      "rating": 4.8,
+      "calories": 320,
+      "tags": ["vegetarian", "quick", "gourmet"],
+      "description": "Silky, slow-cooked eggs folded with black truffle oil and fresh chives — the breakfast of champions.",
+      "image": "🥚",
+      "color": "#F5E6C8",
+      "ingredients": [
+        "4 large free-range eggs",
+        "2 tbsp unsalted butter",
+        "2 tbsp crème fraîche",
+        "1 tsp black truffle oil",
+        "Fresh chives, finely chopped",
+        "Flaky sea salt & white pepper",
+        "Toasted sourdough to serve"
+      ],
+      "steps": [
+        "Crack eggs into a cold non-stick pan. Add butter and place over lowest heat.",
+        "Stir continuously with a silicone spatula, moving the pan on and off the heat.",
+        "When eggs are 80% set, remove from heat entirely. Fold in crème fraîche.",
+        "Drizzle with truffle oil, season generously, top with chives.",
+        "Serve immediately on toasted sourdough."
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Avocado & Burrata Toast",
+      "category": "breakfast",
+      "time": "10 min",
+      "servings": 2,
+      "difficulty": "Easy",
+      "rating": 4.6,
+      "calories": 410,
+      "tags": ["vegetarian", "quick", "trendy"],
+      "description": "Whipped avocado on thick-cut sourdough crowned with creamy burrata and chilli flakes.",
+      "image": "🥑",
+      "color": "#D4EDDA",
+      "ingredients": [
+        "2 thick slices sourdough bread",
+        "2 ripe avocados",
+        "125g fresh burrata",
+        "Juice of 1 lemon",
+        "Red chilli flakes",
+        "Extra virgin olive oil",
+        "Maldon sea salt"
+      ],
+      "steps": [
+        "Toast sourdough until deeply golden and crisp.",
+        "Scoop avocado flesh, mash with lemon juice and salt until smooth.",
+        "Spread avocado generously over toast.",
+        "Tear burrata and arrange on top. Drizzle with olive oil.",
+        "Finish with chilli flakes and a pinch of Maldon salt."
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Roasted Tomato Bisque",
+      "category": "lunch",
+      "time": "45 min",
+      "servings": 4,
+      "difficulty": "Medium",
+      "rating": 4.9,
+      "calories": 280,
+      "tags": ["vegetarian", "comfort", "seasonal"],
+      "description": "Deeply caramelised oven-roasted tomatoes blended to a velvet soup with fresh basil cream.",
+      "image": "🍅",
+      "color": "#FADBD8",
+      "ingredients": [
+        "1 kg ripe vine tomatoes, halved",
+        "1 head garlic",
+        "2 medium onions, quartered",
+        "500ml vegetable stock",
+        "200ml double cream",
+        "Fresh basil leaves",
+        "3 tbsp olive oil",
+        "Salt, pepper, sugar"
+      ],
+      "steps": [
+        "Preheat oven to 200°C. Arrange tomatoes, onion and whole garlic on a baking tray.",
+        "Drizzle with olive oil, sprinkle with salt and a pinch of sugar. Roast 30 minutes.",
+        "Squeeze garlic cloves out of their skins. Transfer everything to a blender.",
+        "Add stock and blend until completely smooth. Pass through a sieve.",
+        "Stir in cream, reheat gently. Serve with basil oil drizzle."
+      ]
+    },
+    {
+      "id": 4,
+      "title": "Niçoise Salad",
+      "category": "lunch",
+      "time": "25 min",
+      "servings": 2,
+      "difficulty": "Easy",
+      "rating": 4.5,
+      "calories": 360,
+      "tags": ["protein-rich", "fresh", "classic"],
+      "description": "The iconic French composed salad — tuna, soft-boiled eggs, olives and green beans in a bright Dijon vinaigrette.",
+      "image": "🥗",
+      "color": "#D6EAF8",
+      "ingredients": [
+        "200g good quality tuna in olive oil",
+        "4 soft-boiled eggs, halved",
+        "200g French green beans, blanched",
+        "100g Niçoise or Kalamata olives",
+        "4 anchovy fillets",
+        "200g cherry tomatoes",
+        "2 tbsp Dijon mustard",
+        "4 tbsp red wine vinegar",
+        "8 tbsp extra virgin olive oil"
+      ],
+      "steps": [
+        "Whisk mustard, vinegar and olive oil together to make vinaigrette. Season well.",
+        "Blanch green beans in boiling salted water for 3 minutes, refresh in ice water.",
+        "Arrange all salad components artfully on a large platter.",
+        "Drizzle generously with vinaigrette just before serving."
+      ]
+    },
+    {
+      "id": 5,
+      "title": "Beef Bourguignon",
+      "category": "dinner",
+      "time": "3 hrs",
+      "servings": 6,
+      "difficulty": "Hard",
+      "rating": 5.0,
+      "calories": 620,
+      "tags": ["classic", "slow-cook", "french"],
+      "description": "Julia Child's legendary braised beef in red wine with pearl onions, lardons and mushrooms.",
+      "image": "🥩",
+      "color": "#EBDEF0",
+      "ingredients": [
+        "1.5 kg beef chuck, cubed",
+        "1 bottle Burgundy red wine",
+        "200g smoked lardons",
+        "200g pearl onions",
+        "300g chestnut mushrooms",
+        "2 carrots, sliced",
+        "4 garlic cloves",
+        "2 tbsp tomato paste",
+        "Bouquet garni",
+        "3 tbsp flour"
+      ],
+      "steps": [
+        "Brown lardons in a heavy casserole. Remove and brown beef in batches.",
+        "Sauté vegetables, add garlic, tomato paste, and flour. Cook 2 minutes.",
+        "Pour in wine, add bouquet garni and beef back. Bring to simmer.",
+        "Cover and braise in 160°C oven for 2.5 hours until beef is tender.",
+        "Sauté pearl onions and mushrooms separately. Add to stew before serving.",
+        "Adjust seasoning. Serve with crusty bread or buttered egg noodles."
+      ]
+    },
+    {
+      "id": 6,
+      "title": "Miso Glazed Salmon",
+      "category": "dinner",
+      "time": "20 min",
+      "servings": 2,
+      "difficulty": "Easy",
+      "rating": 4.7,
+      "calories": 480,
+      "tags": ["healthy", "japanese", "quick"],
+      "description": "Caramelised miso-glazed salmon fillets with sesame cucumber and steamed jasmine rice.",
+      "image": "🐟",
+      "color": "#FEF9E7",
+      "ingredients": [
+        "2 salmon fillets (180g each)",
+        "3 tbsp white miso paste",
+        "2 tbsp mirin",
+        "1 tbsp sake",
+        "1 tbsp honey",
+        "1 tbsp soy sauce",
+        "Sesame seeds, spring onions to garnish"
+      ],
+      "steps": [
+        "Mix miso, mirin, sake, honey and soy into a smooth glaze.",
+        "Marinate salmon in glaze for at least 15 minutes (or overnight).",
+        "Place under a hot grill for 8–10 minutes, basting once, until caramelised.",
+        "Garnish with sesame seeds and sliced spring onions. Serve with rice."
+      ]
+    },
+    {
+      "id": 7,
+      "title": "Crème Brûlée",
+      "category": "dessert",
+      "time": "1 hr",
+      "servings": 4,
+      "difficulty": "Medium",
+      "rating": 4.9,
+      "calories": 390,
+      "tags": ["classic", "french", "indulgent"],
+      "description": "Impossibly smooth vanilla custard topped with a shattering caramelised sugar crust.",
+      "image": "🍮",
+      "color": "#FDF2E9",
+      "ingredients": [
+        "500ml double cream",
+        "1 vanilla pod",
+        "5 egg yolks",
+        "100g caster sugar",
+        "4 tbsp demerara sugar (for bruléeing)"
+      ],
+      "steps": [
+        "Preheat oven to 150°C. Infuse cream with split vanilla pod over gentle heat.",
+        "Whisk yolks and caster sugar until pale. Slowly pour warm cream in, whisking.",
+        "Strain into a jug, skim foam. Pour into 4 ramekins set in a bain-marie.",
+        "Bake 35–40 minutes until just set with a slight wobble in the centre.",
+        "Chill for at least 2 hours. Sprinkle demerara sugar and brûlée with a torch."
+      ]
+    },
+    {
+      "id": 8,
+      "title": "Mango Lassi",
+      "category": "drinks",
+      "time": "5 min",
+      "servings": 2,
+      "difficulty": "Easy",
+      "rating": 4.6,
+      "calories": 210,
+      "tags": ["vegan-option", "quick", "refreshing"],
+      "description": "Thick, chilled mango lassi scented with cardamom and rose water — summer in a glass.",
+      "image": "🥭",
+      "color": "#FFF3CD",
+      "ingredients": [
+        "2 ripe Alphonso mangoes (or 300g frozen)",
+        "400ml full-fat yoghurt",
+        "200ml whole milk",
+        "2 tbsp honey",
+        "¼ tsp cardamom powder",
+        "1 tsp rose water",
+        "Ice cubes"
+      ],
+      "steps": [
+        "Peel and cube mango, discarding the stone.",
+        "Add all ingredients to a blender with a handful of ice.",
+        "Blend on high until completely smooth and frothy.",
+        "Taste and adjust sweetness. Pour into chilled glasses.",
+        "Garnish with a pinch of cardamom and dried rose petals."
+      ]
+    }
+  ]
+}
