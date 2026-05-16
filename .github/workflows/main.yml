@@ -53,10 +53,32 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: npm
+          # no 'cache: npm' — this is a static site with no committed lockfile
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Bootstrap package.json & install dev tools
+        # Writes a minimal package.json so npm install works without a lockfile.
+        # All tools are invoked via npx, so only devDependencies are needed here.
+        run: |
+          cat > package.json <<'EOF'
+          {
+            "name": "artisan-table",
+            "version": "1.0.0",
+            "private": true,
+            "devDependencies": {
+              "eslint": "^8.57.0",
+              "html-validate": "^8.18.0",
+              "stylelint": "^16.6.1",
+              "stylelint-config-standard": "^36.0.1",
+              "jest": "^29.7.0",
+              "jest-environment-jsdom": "^29.7.0",
+              "html-minifier-terser": "^7.2.0",
+              "clean-css-cli": "^5.6.3",
+              "terser": "^5.31.0",
+              "@playwright/test": "^1.44.0"
+            }
+          }
+          EOF
+          npm install --prefer-offline
 
       - name: Lint JavaScript (ESLint)
         run: npx eslint app.js --max-warnings=0
@@ -105,10 +127,29 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: npm
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Bootstrap package.json & install dev tools
+        run: |
+          cat > package.json <<'EOF'
+          {
+            "name": "artisan-table",
+            "version": "1.0.0",
+            "private": true,
+            "devDependencies": {
+              "eslint": "^8.57.0",
+              "html-validate": "^8.18.0",
+              "stylelint": "^16.6.1",
+              "stylelint-config-standard": "^36.0.1",
+              "jest": "^29.7.0",
+              "jest-environment-jsdom": "^29.7.0",
+              "html-minifier-terser": "^7.2.0",
+              "clean-css-cli": "^5.6.3",
+              "terser": "^5.31.0",
+              "@playwright/test": "^1.44.0"
+            }
+          }
+          EOF
+          npm install --prefer-offline
 
       - name: Run unit tests (Jest)
         run: npx jest --coverage --coverageReporters=text --coverageReporters=lcov
@@ -165,10 +206,29 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: npm
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Bootstrap package.json & install dev tools
+        run: |
+          cat > package.json <<'EOF'
+          {
+            "name": "artisan-table",
+            "version": "1.0.0",
+            "private": true,
+            "devDependencies": {
+              "eslint": "^8.57.0",
+              "html-validate": "^8.18.0",
+              "stylelint": "^16.6.1",
+              "stylelint-config-standard": "^36.0.1",
+              "jest": "^29.7.0",
+              "jest-environment-jsdom": "^29.7.0",
+              "html-minifier-terser": "^7.2.0",
+              "clean-css-cli": "^5.6.3",
+              "terser": "^5.31.0",
+              "@playwright/test": "^1.44.0"
+            }
+          }
+          EOF
+          npm install --prefer-offline
 
       - name: Create dist directory
         run: mkdir -p ${{ env.BUILD_DIR }}
@@ -325,7 +385,25 @@ jobs:
             echo "message=Production deploy FAILED" >> $GITHUB_OUTPUT
           fi
 
+      # ── Guard: skip Slack entirely when the secret is not configured ──
+      # GitHub Actions allows secret != '' checks in 'if' expressions.
+      # This prevents the "Need to provide at least one botToken or webhookUrl"
+      # crash that occurs when SLACK_WEBHOOK_URL is absent.
+      - name: Check Slack secret is configured
+        id: slack_guard
+        run: |
+          if [ -n "$SLACK_URL" ]; then
+            echo "configured=true" >> $GITHUB_OUTPUT
+          else
+            echo "configured=false" >> $GITHUB_OUTPUT
+            echo "ℹ️  SLACK_WEBHOOK_URL secret not set — skipping Slack notification."
+            echo "    Add it at: Settings → Secrets → Actions → New repository secret"
+          fi
+        env:
+          SLACK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
       - name: Send Slack notification
+        if: steps.slack_guard.outputs.configured == 'true'
         uses: slackapi/slack-github-action@v1
         with:
           payload: |
@@ -344,4 +422,4 @@ jobs:
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
-        continue-on-error: true     # don't fail the pipeline if Slack is down
+        continue-on-error: true     # don't fail the pipeline if Slack is momentarily down
